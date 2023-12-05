@@ -41,7 +41,7 @@ class DayFourB: AdventDay() {
             // For each time we should play...
             for (j in 0 ..< cardsToPlay[i]!!) {
                 // Calculate the winners
-                val winners = cards[i].picks.intersect(cards[i].wins.toSet())
+                val winners = cards[i]
                 // If there are any
                 if (winners.isNotEmpty()) {
                     //Add the winnings to the next batch of cards.
@@ -55,7 +55,7 @@ class DayFourB: AdventDay() {
         return cardsToPlay.map { it.value }.sum().toString()
     }
 
-    private fun parseCards(inputLines: List<String>): List<Card> = inputLines.map { line ->
+    private fun parseCards(inputLines: List<String>): List<Set<Int>> = inputLines.map { line ->
         val (_, cardContents) = line.split(": ")
         val (picks, wins) = cardContents.split(" | ")
             .stream()
@@ -64,7 +64,7 @@ class DayFourB: AdventDay() {
                     .map { chunk -> chunk.trim().toInt() }
             }
             .toList()
-        Card(picks, wins)
+        picks.intersect(wins.toSet())
     }.toList()
 
 }
