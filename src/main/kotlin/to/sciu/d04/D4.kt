@@ -17,8 +17,6 @@ class DayFourA: AdventDay() {
 
 class DayFourB: AdventDay() {
 
-    private data class Card(val picks: List<Int>, val wins: List<Int>)
-
     override fun testHere(inputLines: List<String>): String {
 
         val cards = parseCards(inputLines)
