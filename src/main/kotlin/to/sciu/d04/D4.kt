@@ -8,18 +8,9 @@ class DayFourA: AdventDay() {
 
     override fun testHere(inputLines: List<String>): String {
 
-        val winnings = inputLines.map { line ->
-            val (_, cardContents ) = line.split(": ")
-            val (picks, wins) = cardContents.split(" | ")
-                .stream()
-                .map { it.chunked(3)
-                    .map{ chunk -> chunk.trim().toInt() } }
-                .toList()
-            val winners = picks.intersect(wins.toSet())
+        return parseCards(inputLines).map {winners ->
             2.0.pow(winners.size - 1)
-        }.fold(0) { x, y -> (x + y).toInt() }
-
-        return winnings.toString()
+        }.fold(0) { x, y -> (x + y).toInt() }.toString()
     }
 
 }
@@ -54,17 +45,16 @@ class DayFourB: AdventDay() {
 
         return cardsToPlay.map { it.value }.sum().toString()
     }
-
-    private fun parseCards(inputLines: List<String>): List<Set<Int>> = inputLines.map { line ->
-        val (_, cardContents) = line.split(": ")
-        val (picks, wins) = cardContents.split(" | ")
-            .stream()
-            .map {
-                it.chunked(3)
-                    .map { chunk -> chunk.trim().toInt() }
-            }
-            .toList()
-        picks.intersect(wins.toSet())
-    }.toList()
-
 }
+
+private fun parseCards(inputLines: List<String>): List<Set<Int>> = inputLines.map { line ->
+    val (_, cardContents) = line.split(": ")
+    val (picks, wins) = cardContents.split(" | ")
+        .stream()
+        .map {
+            it.chunked(3)
+                .map { chunk -> chunk.trim().toInt() }
+        }
+        .toList()
+    picks.intersect(wins.toSet())
+}.toList()
