@@ -9,18 +9,13 @@ class DayFourA: AdventDay() {
     override fun testHere(inputLines: List<String>): String {
 
         val winnings = inputLines.map { line ->
-            val (cardName, cardContents ) = line.split(": ")
+            val (_, cardContents ) = line.split(": ")
             val (picks, wins) = cardContents.split(" | ")
                 .stream()
                 .map { it.chunked(3)
                     .map{ chunk -> chunk.trim().toInt() } }
                 .toList()
             val winners = picks.intersect(wins.toSet())
-            println(picks)
-            println(wins)
-            println("---")
-            println(winners)
-            println("---")
             2.0.pow(winners.size - 1)
         }.fold(0) { x, y -> (x + y).toInt() }
 
@@ -51,7 +46,7 @@ class DayFourB: AdventDay() {
                 if (winners.isNotEmpty()) {
                     //Add the winnings to the next batch of cards.
                     for (k in 1..winners.size) {
-                        cardsToPlay[i + k] = cardsToPlay[i + k]!!.plus(1)
+                        cardsToPlay[i + k] = cardsToPlay[i + k]!! + 1
                     }
                 }
             }
@@ -61,7 +56,7 @@ class DayFourB: AdventDay() {
     }
 
     private fun parseCards(inputLines: List<String>): List<Card> = inputLines.map { line ->
-        val (cardName, cardContents) = line.split(": ")
+        val (_, cardContents) = line.split(": ")
         val (picks, wins) = cardContents.split(" | ")
             .stream()
             .map {
