@@ -44,7 +44,7 @@ class Day5A: AdventDay() {
         val humidityToLocationRecords = almanac.chapters[MapType.HUM_TO_LOC]!!
 
         var nextOffset: Long
-        val locations = mutableMapOf<Long, Long>()
+        var finalLocation: Long = -1
         for (seed in almanac.seeds) {
             nextOffset = getNextLookup(seed, seedToSoilRecords)
             nextOffset = getNextLookup(nextOffset, soilToFertilizerRecords)
@@ -52,11 +52,12 @@ class Day5A: AdventDay() {
             nextOffset = getNextLookup(nextOffset, waterToLightRecords)
             nextOffset = getNextLookup(nextOffset, lightToTemperatureRecords)
             nextOffset = getNextLookup(nextOffset, temperatureToHumidityRecords)
-            nextOffset = getNextLookup(nextOffset, humidityToLocationRecords)
-            locations[seed] = nextOffset
+            val location = getNextLookup(nextOffset, humidityToLocationRecords)
+            if (finalLocation < 0) finalLocation = location
+            finalLocation = finalLocation.coerceAtMost(location)
         }
 
-        return locations.values.min().toString()
+        return finalLocation.toString()
     }
 
     private fun getNextLookup(seed: Long, records: List<AlmanacRecord>): Long {
@@ -151,7 +152,7 @@ class Day5B: AdventDay() {
         val humidityToLocationRecords = almanac.chapters[MapType.HUM_TO_LOC]!!
 
         var nextOffset: Long
-        val locations = mutableMapOf<Long, Long>()
+        var finalLocation: Long = -1
         for (seedRange in almanac.seeds) {
             for (seed in seedRange) {
                 nextOffset = getNextLookup(seed, seedToSoilRecords)
@@ -160,12 +161,13 @@ class Day5B: AdventDay() {
                 nextOffset = getNextLookup(nextOffset, waterToLightRecords)
                 nextOffset = getNextLookup(nextOffset, lightToTemperatureRecords)
                 nextOffset = getNextLookup(nextOffset, temperatureToHumidityRecords)
-                nextOffset = getNextLookup(nextOffset, humidityToLocationRecords)
-                locations[seed] = nextOffset
+                val location = getNextLookup(nextOffset, humidityToLocationRecords)
+                if (finalLocation < 0) finalLocation = location
+                finalLocation = finalLocation.coerceAtMost(location)
             }
         }
 
-        return locations.values.min().toString()
+        return finalLocation.toString()
     }
 
     private fun getNextLookup(seed: Long, records: List<AlmanacRecord>): Long {
