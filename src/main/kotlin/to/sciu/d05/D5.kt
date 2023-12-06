@@ -2,7 +2,6 @@ package to.sciu.d05
 
 import to.sciu.AdventDay
 import to.sciu.d05.Helpers.calculateLocation
-import to.sciu.d05.Helpers.getNextLookup
 
 enum class MapType{
     SEED_TO_SOIL,
@@ -31,7 +30,16 @@ enum class MapType{
 data class AlmanacRecord(val destIdx: Long, val srcIdx: Long, val range: Int)
 
 object Helpers {
-    fun getNextLookup(seed: Long, records: List<AlmanacRecord>): Long {
+    fun calculateLocation(chapters: Map<MapType, List<AlmanacRecord>>, seed: Long): Long {
+        var nextOffset: Long = getNextLookup(seed, chapters[MapType.SEED_TO_SOIL]!!)
+        nextOffset = getNextLookup(nextOffset, chapters[MapType.SOIL_TO_FERT]!!)
+        nextOffset = getNextLookup(nextOffset, chapters[MapType.FERT_TO_H20]!!)
+        nextOffset = getNextLookup(nextOffset, chapters[MapType.H20_TO_LIGHT]!!)
+        nextOffset = getNextLookup(nextOffset, chapters[MapType.LIGHT_TO_TEMP]!!)
+        nextOffset = getNextLookup(nextOffset, chapters[MapType.TEMP_TO_HUM]!!)
+        return getNextLookup(nextOffset, chapters[MapType.HUM_TO_LOC]!!)
+    }
+    private fun getNextLookup(seed: Long, records: List<AlmanacRecord>): Long {
         var nextLookup: Long = -1
         for (record in records) {
             nextLookup = if (seed >= record.srcIdx && seed <= record.srcIdx + record.range) {
@@ -46,16 +54,6 @@ object Helpers {
             nextLookup = seed
         }
         return nextLookup
-    }
-
-    fun calculateLocation(chapters: Map<MapType, List<AlmanacRecord>>, seed: Long): Long {
-        var nextOffset: Long = getNextLookup(seed, chapters[MapType.SEED_TO_SOIL]!!)
-        nextOffset = getNextLookup(nextOffset, chapters[MapType.SOIL_TO_FERT]!!)
-        nextOffset = getNextLookup(nextOffset, chapters[MapType.FERT_TO_H20]!!)
-        nextOffset = getNextLookup(nextOffset, chapters[MapType.H20_TO_LIGHT]!!)
-        nextOffset = getNextLookup(nextOffset, chapters[MapType.LIGHT_TO_TEMP]!!)
-        nextOffset = getNextLookup(nextOffset, chapters[MapType.TEMP_TO_HUM]!!)
-        return getNextLookup(nextOffset, chapters[MapType.HUM_TO_LOC]!!)
     }
 }
 class Day5A: AdventDay() {
@@ -116,16 +114,17 @@ class Day5B: AdventDay() {
 
         val almanac = parseAlmanac(inputLines)
 
-        var finalLocation: Long = -1
-        for (seedRange in almanac.seeds) {
+        val closestLocation = almanac.seeds.parallelStream().mapToLong{ seedRange ->
+            var finalLocation: Long = -1
             for (seed in seedRange) {
                 val location = calculateLocation(almanac.chapters, seed)
                 if (finalLocation < 0) finalLocation = location
                 finalLocation = finalLocation.coerceAtMost(location)
             }
-        }
+            finalLocation
+        }.min()
 
-        return finalLocation.toString()
+        return closestLocation.orElseThrow().toString()
     }
 
     private fun parseAlmanac(inputLines: List<String>): Almanac {
