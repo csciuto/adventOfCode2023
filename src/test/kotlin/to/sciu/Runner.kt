@@ -5,7 +5,6 @@ import to.sciu.d01.DayOneB
 import to.sciu.d02.DayTwoA
 import to.sciu.d02.DayTwoB
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import to.sciu.d03.DayThreeA
 import to.sciu.d03.DayThreeB
@@ -63,6 +62,6 @@ class AdventRunner {
 
     @Test
     fun `December 5 Part 2`() {
-        assertEquals("46", Day5B().runMe().result)
+        assertEquals("9622622", Day5B().runMe().result)
     }
 }
