@@ -76,6 +76,6 @@ class AdventRunner {
 
     @Test
     fun `December 6 Part 2`() {
-        assertEquals("288", Day6B().runMe("sample.txt").result)
+        assertEquals("71503", Day6B().runMe().result)
     }
 }
