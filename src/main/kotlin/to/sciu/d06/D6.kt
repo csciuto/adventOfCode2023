@@ -41,16 +41,16 @@ class Day6B: AdventDay() {
 private fun calculateWaysToWin(maxTime: Long, recordDistance: Long): Int {
 
     var lastTime = -1L
-    val winningTimes: MutableList<Long> = mutableListOf()
+    var winningTimes = 0
 
     for (buttonTime in 0 .. maxTime) {
         val myDistance = (maxTime - buttonTime) * buttonTime
         if (myDistance > recordDistance) {
-            winningTimes.add(myDistance)
+            winningTimes++
             lastTime = myDistance
         } else if (myDistance < lastTime) { // We're beyond the optimal time
             break
         }
     }
-    return winningTimes.size
+    return winningTimes
 }
