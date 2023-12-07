@@ -5,6 +5,7 @@ import to.sciu.d01.DayOneB
 import to.sciu.d02.DayTwoA
 import to.sciu.d02.DayTwoB
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import to.sciu.d03.DayThreeA
 import to.sciu.d03.DayThreeB
@@ -12,6 +13,8 @@ import to.sciu.d04.DayFourA
 import to.sciu.d04.DayFourB
 import to.sciu.d05.Day5A
 import to.sciu.d05.Day5B
+import to.sciu.d06.Day6A
+import to.sciu.d06.Day6B
 
 class AdventRunner {
 
@@ -61,7 +64,18 @@ class AdventRunner {
     }
 
     @Test
+    @Disabled("This test takes minutes to run...")
     fun `December 5 Part 2`() {
         assertEquals("9622622", Day5B().runMe().result)
+    }
+
+    @Test
+    fun `December 6 Part 1`() {
+        assertEquals("800280", Day6A().runMe().result)
+    }
+
+    @Test
+    fun `December 6 Part 2`() {
+        assertEquals("288", Day6B().runMe("sample.txt").result)
     }
 }
